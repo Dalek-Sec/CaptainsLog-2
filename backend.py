@@ -3,15 +3,15 @@ import time
 import dataset
 # Internal modules
 import config
+import frontend
 
 class Logbook:
     def __init__(self, database_url=config.database_url):
         # Initailize database
         self.captainslogs_db = dataset.connect(database_url)
         self.logs = self.captainslogs_db["logs"]
-        self.tags = self.captainslogs_db["tags"]
         self.logs_to_tags = self.captainslogs_db["logs_to_tags"]
-        
+
     def create_entry(self, text, tags, time=time.time()): # TODO: Implement proper use of transactions
         # Create entry
         self.logs.insert(dict(text=text, time=time))
@@ -24,14 +24,30 @@ class Logbook:
         entries = []
         all_recent_entries = self.logs.find(order_by=["-time"])
         for entry in all_recent_entries:
-            print("----")
             entry_tags = [row["tag"] for row in self.logs_to_tags.find(entry_id=entry["id"])]
-            print(entry_tags)
-            print(set(tags) - set(entry_tags))
             if set(tags) - set(entry_tags) == set():
                 entries.append(entry)
             if len(entries) >= quantity:
                 break
 
-        print("Ret")
         return entries
+
+    def get_recent_tag_sets(self, quantity):
+        tag_sets = []
+        all_recent_entries = self.logs.find(order_by=["-time"])
+        for entry in all_recent_entries:
+            tag_set = set(self.logs_to_tags.find(id=entry["id"]))
+            if not tag_set in tag_sets:
+                tag_sets.append(tag_set)
+            if len(tag_sets) >= quantity:
+                break
+        
+        return tag_sets
+
+class Session:
+    def __init__(self, logbook=Logbook()):
+        self.lb = logbook
+        self.session_tags = frontend.get_session_tags(self.lb)
+        while True:
+            prompt = frontend.display_log_screen_prompt(self.lb, self.session_tags)
+
