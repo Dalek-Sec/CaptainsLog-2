@@ -32,5 +32,14 @@ class Logbook:
 
         return all_tags_existed
 
-    def recent_entries(self, quantity):
-        pass
+    def recent_entries(self, tags, quantity): # TODO: Learn how to properly use junction tables
+        entries = []
+        all_recent_entries = self.logs.find(order_by=["-time"])
+        for entry in all_recent_entries:
+            print("----")
+            entry_to_tags = self.logs_to_tags.find(entry_id=entry["id"])
+            entry_tags = [self.tags.find_one(id=tag["id"])["name"] for tag in entry_to_tags]
+            print(entry_tags)
+            #if set()
+            if len(entries) >= quantity:
+                break
