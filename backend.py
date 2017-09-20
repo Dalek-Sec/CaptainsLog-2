@@ -36,7 +36,8 @@ class Logbook:
         tag_sets = []
         all_recent_entries = self.logs.find(order_by=["-time"])
         for entry in all_recent_entries:
-            tag_set = sorted([row["tag"] for row in self.logs_to_tags.find(id=entry["id"])])
+            print(entry)
+            tag_set = sorted([row["tag"] for row in self.logs_to_tags.find(entry_id=entry["id"])])
             print("TAG SET: " + str(tag_set))
             if not tag_set in tag_sets:
                 tag_sets.append(tag_set)
