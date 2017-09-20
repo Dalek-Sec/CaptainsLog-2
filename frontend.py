@@ -1,10 +1,20 @@
 def get_session_tags(lb):
-    print(lb.get_recent_tag_sets(5))
-
     tags = []
     while True:
-        tag_input = input("Enter tag, or return empty to continue: ")
-        tags.append(tag_input)
+        recent_tag_sets = lb.get_recent_tag_sets(10)
+        for index, tag_set in enumerate(recent_tag_sets):
+            print("["+str(index)+"]:" + str(tag_set))
+        print("Current tags: " + str(tags))
+        tag_input = input("Enter tag, tag set number, or return empty to continue: ")
+        if tag_input.isdigit():
+            try:
+                tags += recent_tag_sets[int(tag_input)]
+            except IndexError:
+                print("Number is outside of range listed")
+        elif tag_input == "":
+            break
+        else:
+            tags.append(tag_input)
     
     return tags
 
