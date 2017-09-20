@@ -36,7 +36,7 @@ class Logbook:
         tag_sets = []
         all_recent_entries = self.logs.find(order_by=["-time"])
         for entry in all_recent_entries:
-            tag_set = set(self.logs_to_tags.find(id=entry["id"]))
+            tag_set = sorted([row["tag"] for row in self.logs_to_tags.find(id=entry["id"])])
             if not tag_set in tag_sets:
                 tag_sets.append(tag_set)
             if len(tag_sets) >= quantity:
