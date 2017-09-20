@@ -12,11 +12,11 @@ class Logbook:
         self.logs = self.captainslogs_db["logs"]
         self.logs_to_tags = self.captainslogs_db["logs_to_tags"]
 
-    def create_entry(self, text, tags, time=time.time()): # TODO: Implement proper use of transactions
+    def create_entry(self, text, tags, entry_time): # TODO: Implement proper use of transactions
         # Create entry
-        self.logs.insert(dict(text=text, time=time))
+        self.logs.insert(dict(text=text, time=entry_time))
         # Generate tags to entry
-        entry_id = self.logs.find_one(text=text, time=time)["id"]
+        entry_id = self.logs.find_one(text=text, time=entry_time)["id"]
         for tag in tags:
             self.logs_to_tags.insert(dict(entry_id=entry_id, tag=tag))
 
@@ -51,4 +51,4 @@ class Session:
         self.session_tags = frontend.get_session_tags(self.lb)
         while True:
             entry_input = frontend.display_log_screen_prompt(self.lb, self.session_tags)
-            self.lb.create_entry(entry_input)
+            self.lb.create_entry(entry_input, self.session_tags, time.time())

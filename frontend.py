@@ -1,4 +1,5 @@
 import shutil
+import time
 
 def get_session_tags(lb):
     tags = []
@@ -24,12 +25,17 @@ def get_session_tags(lb):
 
 def display_log_screen_prompt(lb, tags):
     width, height = shutil.get_terminal_size()
-    # Print header
-    print("\n\n\nDatabase: " + lb.captainslogs_db.url)
+    print("\n\n\n")
     # Print previous entries
-    recent_entries = lb.recent_entries(tags, 10)
-    for entry in recent_entries:
-        print(entry)
+    recent_entries = lb.recent_entries(tags, height)[::-1]
+    print(type(recent_entries))
+    for index, entry in enumerate(recent_entries):
+        if index == 0 or time.strftime("%x", time.localtime(entry["time"])) != time.strftime("%x", time.localtime(recent_entries[index-1]["time"])):
+            print(("{:-^"+str(width)+"}").format(time.strftime("%A, %B %d, %Y", time.localtime(entry["time"]))))
+        id_text = str(entry["id"])
+        time_text = "[" + time.strftime("%H:%M:%S", time.localtime(entry["time"])) + "]"
+        entry_text = entry["text"]
+        print(id_text+time_text+entry_text)
 
     entry_input = input("Enter entry, or ctrl+c for commands: ")
     return entry_input
