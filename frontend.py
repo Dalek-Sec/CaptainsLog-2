@@ -25,7 +25,7 @@ def get_session_tags(lb):
 
 def display_log_screen_prompt(lb, tags):
     width, height = shutil.get_terminal_size()
-    print("\n\n\n")
+    print("\n"*height)
     # Print previous entries
     recent_entries = lb.recent_entries(tags, height)[::-1]
     print(type(recent_entries))
