@@ -15,8 +15,18 @@ def get_session_tags(lb):
             break
         else:
             tags.append(tag_input)
+
+        tags = list(set(tags))
     
     return tags
 
 def display_log_screen_prompt(lb, tags):
-    pass
+    # Print header
+    print("Database: " + lb.captainslogs_db.url)
+    # Print previous entries
+    recent_entries = lb.recent_entries(tags, 10)
+    for entry in recent_entries:
+        print(entry)
+
+    entry_input = input("Enter entry, or ctrl+c for commands: ")
+    lb.create_entry(entry_input, tags)
