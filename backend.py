@@ -37,11 +37,13 @@ class Logbook:
         all_recent_entries = self.logs.find(order_by=["-time"])
         for entry in all_recent_entries:
             tag_set = sorted([row["tag"] for row in self.logs_to_tags.find(id=entry["id"])])
+            print("TAG SET: " + str(tag_set))
             if not tag_set in tag_sets:
                 tag_sets.append(tag_set)
             if len(tag_sets) >= quantity:
                 break
         
+        print("FINAL: " + str(tag_sets))
         return tag_sets
 
 class Session:

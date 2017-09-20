@@ -1,3 +1,5 @@
+import shutil
+
 def get_session_tags(lb):
     tags = []
     while True:
@@ -21,8 +23,9 @@ def get_session_tags(lb):
     return tags
 
 def display_log_screen_prompt(lb, tags):
+    width, height = shutil.get_terminal_size()
     # Print header
-    print("Database: " + lb.captainslogs_db.url)
+    print("\n\n\nDatabase: " + lb.captainslogs_db.url)
     # Print previous entries
     recent_entries = lb.recent_entries(tags, 10)
     for entry in recent_entries:
