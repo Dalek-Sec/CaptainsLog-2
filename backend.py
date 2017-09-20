@@ -36,9 +36,7 @@ class Logbook:
         tag_sets = []
         all_recent_entries = self.logs.find(order_by=["-time"])
         for entry in all_recent_entries:
-            print(entry)
             tag_set = sorted([row["tag"] for row in self.logs_to_tags.find(entry_id=entry["id"])])
-            print("TAG SET: " + str(tag_set))
             if not tag_set in tag_sets:
                 tag_sets.append(tag_set)
             if len(tag_sets) >= quantity:
@@ -52,5 +50,5 @@ class Session:
         self.lb = logbook
         self.session_tags = frontend.get_session_tags(self.lb)
         while True:
-            prompt = frontend.display_log_screen_prompt(self.lb, self.session_tags)
-
+            entry_input = frontend.display_log_screen_prompt(self.lb, self.session_tags)
+            self.lb.create_entry(entry_input)

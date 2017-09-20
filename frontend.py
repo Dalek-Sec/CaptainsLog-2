@@ -32,4 +32,4 @@ def display_log_screen_prompt(lb, tags):
         print(entry)
 
     entry_input = input("Enter entry, or ctrl+c for commands: ")
-    lb.create_entry(entry_input, tags)
+    return entry_input
