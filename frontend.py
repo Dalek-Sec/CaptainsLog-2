@@ -39,3 +39,8 @@ def display_log_screen_prompt(lb, tags):
 
     entry_input = input("Enter entry, or ctrl+c for commands: ")
     return entry_input
+
+def display_command_screen_prompt(command_help):
+    print(command_help)
+    command_input = input("Enter command: ")
+    return command_input

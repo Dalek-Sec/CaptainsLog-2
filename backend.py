@@ -50,5 +50,19 @@ class Session:
         self.lb = logbook
         self.session_tags = frontend.get_session_tags(self.lb)
         while True:
-            entry_input = frontend.display_log_screen_prompt(self.lb, self.session_tags)
-            self.lb.create_entry(entry_input, self.session_tags, time.time())
+            try:
+                entry_input = frontend.display_log_screen_prompt(self.lb, self.session_tags)
+                self.lb.create_entry(entry_input, self.session_tags, time.time())
+            except KeyboardInterrupt:
+                command_help = "\nq - Quit\nn - New session\nr - Refresh log screen\ne - Edit entry text\nt - Edit entry tags"
+                command_input = frontend.display_command_screen_prompt(command_help)
+                if command_input == "q":
+                    quit()
+                elif command_input == "n":
+                    Session()
+                    quit()
+                elif command_input == "r":
+                    pass
+                else:
+                    print("Unknown command")
+                    time.sleep(1)
