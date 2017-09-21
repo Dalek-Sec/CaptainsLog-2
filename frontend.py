@@ -1,5 +1,8 @@
+# Built in
 import shutil
 import time
+# Installed
+from colored import fg, bg, attr
 
 def get_session_tags(lb):
     tags = []
@@ -33,7 +36,7 @@ def display_log_screen_prompt(lb, tags):
     for index, entry in enumerate(recent_entries):
         if index == 0 or time.strftime("%x", time.localtime(entry["time"])) != time.strftime("%x", time.localtime(recent_entries[index-1]["time"])):
             print(("{:-^"+str(width)+"}").format(time.strftime("%A, %B %d, %Y", time.localtime(entry["time"]))))
-        id_text = str(entry["id"])
+        id_text = ("%s"+str(entry["id"])+"%s")%(fg("green"), attr("reset"))
         time_text = "[" + time.strftime("%H:%M:%S", time.localtime(entry["time"])) + "]"
         entry_text = entry["text"]
         print(id_text+time_text+entry_text)
