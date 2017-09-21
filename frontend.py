@@ -43,6 +43,7 @@ def display_log_screen_prompt(lb, tags):
         entry_text = Fore.WHITE+entry["text"]
         print(id_text+time_text+entry_text)
 
+    print(Fore.CYAN+"Session tags: "+str(tags))
     entry_input = input("Enter entry, or ctrl+c for commands: ")
     return entry_input
 
