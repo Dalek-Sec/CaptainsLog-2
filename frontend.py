@@ -4,10 +4,12 @@ import time
 def get_session_tags(lb):
     tags = []
     while True:
+        width, height = shutil.get_terminal_size()
+        print("\n"*height)
         recent_tag_sets = lb.get_recent_tag_sets(10)
         for index, tag_set in enumerate(recent_tag_sets):
             print("["+str(index)+"]:" + str(tag_set))
-        print("Current tags: " + str(tags))
+        print("Selected tags: " + str(tags))
         tag_input = input("Enter tag, tag set number, or return empty to continue: ")
         if tag_input.isdigit():
             try:
@@ -28,7 +30,6 @@ def display_log_screen_prompt(lb, tags):
     print("\n"*height)
     # Print previous entries
     recent_entries = lb.recent_entries(tags, height)[::-1]
-    print(type(recent_entries))
     for index, entry in enumerate(recent_entries):
         if index == 0 or time.strftime("%x", time.localtime(entry["time"])) != time.strftime("%x", time.localtime(recent_entries[index-1]["time"])):
             print(("{:-^"+str(width)+"}").format(time.strftime("%A, %B %d, %Y", time.localtime(entry["time"]))))
@@ -40,7 +41,3 @@ def display_log_screen_prompt(lb, tags):
     entry_input = input("Enter entry, or ctrl+c for commands: ")
     return entry_input
 
-def display_command_screen_prompt(command_help):
-    print(command_help)
-    command_input = input("Enter command: ")
-    return command_input

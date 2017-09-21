@@ -35,14 +35,13 @@ class Logbook:
     def get_recent_tag_sets(self, quantity):
         tag_sets = []
         all_recent_entries = self.logs.find(order_by=["-time"])
-        for entry in all_recent_entries:
+        for entry in all_recent_entries: # TODO: If the logbook has less than the requsted number of tagsets, but many entries, it could take a long time to load tag sets. This should be addressed eventually.
             tag_set = sorted([row["tag"] for row in self.logs_to_tags.find(entry_id=entry["id"])])
             if not tag_set in tag_sets:
                 tag_sets.append(tag_set)
             if len(tag_sets) >= quantity:
                 break
         
-        print("FINAL: " + str(tag_sets))
         return tag_sets
 
 class Session:
@@ -54,8 +53,9 @@ class Session:
                 entry_input = frontend.display_log_screen_prompt(self.lb, self.session_tags)
                 self.lb.create_entry(entry_input, self.session_tags, time.time())
             except KeyboardInterrupt:
-                command_help = "\nq - Quit\nn - New session\nr - Refresh log screen\ne - Edit entry text\nt - Edit entry tags"
-                command_input = frontend.display_command_screen_prompt(command_help)
+                command_help = "\nq - Quit\nn - New session\nr - Refresh log screen\ne - Edit entry text*\nt - Edit entry tags*\n*Not yet implemented"
+                print(command_help)
+                command_input = input("Enter command: ")
                 if command_input == "q":
                     quit()
                 elif command_input == "n":
