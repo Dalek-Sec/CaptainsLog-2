@@ -2,7 +2,9 @@
 import shutil
 import time
 # Installed
-from colored import fg, bg, attr
+from colorama import init
+init(autoreset=True)
+from colorama import Fore, Back, Style
 
 def get_session_tags(lb):
     tags = []
@@ -35,11 +37,11 @@ def display_log_screen_prompt(lb, tags):
     recent_entries = lb.recent_entries(tags, height)[::-1]
     for index, entry in enumerate(recent_entries):
         if index == 0 or time.strftime("%x", time.localtime(entry["time"])) != time.strftime("%x", time.localtime(recent_entries[index-1]["time"])):
-            print(("{:-^"+str(width)+"}").format(time.strftime("%A, %B %d, %Y", time.localtime(entry["time"]))))
-        id_text = ("%s"+str(entry["id"])+"%s")%(fg("green"), attr("reset"))
-        time_text = "[" + time.strftime("%H:%M:%S", time.localtime(entry["time"])) + "]"
-        entry_text = entry["text"]
-        print(id_text+time_text+entry_text)
+            print(Fore.LIGHTMAGENTA_EX+("{:-^"+str(width-1)+"}").format(time.strftime("%A, %B %d, %Y", time.localtime(entry["time"]))))
+        id_text = Fore.LIGHTBLACK_EX+(Back.BLACK if index%2==0 else Back.BLUE)+str(entry["id"])
+        time_text = ("%s[%s" + time.strftime("%H:%M:%S", time.localtime(entry["time"])) + "%s]") % (Fore.GREEN, Fore.LIGHTMAGENTA_EX, Fore.GREEN)
+        entry_text = Fore.LIGHTWHITE_EX+entry["text"]
+        print(("{:<"+str(width+29)+"}").format(id_text+time_text+entry_text))
 
     entry_input = input("Enter entry, or ctrl+c for commands: ")
     return entry_input
