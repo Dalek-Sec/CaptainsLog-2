@@ -38,10 +38,10 @@ def display_log_screen_prompt(lb, tags):
     for index, entry in enumerate(recent_entries):
         if index == 0 or time.strftime("%x", time.localtime(entry["time"])) != time.strftime("%x", time.localtime(recent_entries[index-1]["time"])):
             print(Fore.LIGHTMAGENTA_EX+("{:-^"+str(width-1)+"}").format(time.strftime("%A, %B %d, %Y", time.localtime(entry["time"]))))
-        id_text = Fore.LIGHTBLACK_EX+(Back.BLACK if index%2==0 else Back.BLUE)+str(entry["id"])
+        id_text = Fore.LIGHTBLACK_EX+(Style.BRIGHT if index%2==0 else Style.NORMAL)+str(entry["id"])
         time_text = ("%s[%s" + time.strftime("%H:%M:%S", time.localtime(entry["time"])) + "%s]") % (Fore.GREEN, Fore.LIGHTMAGENTA_EX, Fore.GREEN)
-        entry_text = Fore.LIGHTWHITE_EX+entry["text"]
-        print(("{:<"+str(width+29)+"}").format(id_text+time_text+entry_text))
+        entry_text = Fore.WHITE+entry["text"]
+        print(id_text+time_text+entry_text)
 
     entry_input = input("Enter entry, or ctrl+c for commands: ")
     return entry_input
